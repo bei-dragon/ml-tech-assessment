@@ -1,3 +1,5 @@
+import os
+import pytest
 from app import configurations
 import pydantic
 from tests.adapters import mock_data
@@ -8,7 +10,8 @@ class Response(pydantic.BaseModel):
     summary: str
     action_items: list[str]
 
-
+# This decorator will skip the test if the OPENAI_API_KEY is not in the environment
+@pytest.mark.skipif(not os.getenv("OPENAI_API_KEY"), reason="OPENAI_API_KEY environment variable not set")
 def test_openai_adapter() -> None:
     # Configuration
     env_variables = configurations.EnvConfigs()
